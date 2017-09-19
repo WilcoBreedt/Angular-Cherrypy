@@ -1,0 +1,63 @@
+{
+    "cherrypy": {
+        "host": "127.0.0.1",
+        "port": 8080,
+        "client_host": "http://127.0.0.1:4200"
+    },
+    "databases": [
+        {
+            "host": "127.0.0.1",
+            "port": 5432,
+            "database_name": "booking",
+            "password": "masterkey",
+            "username": "postgres",
+            "sql" : "CREATE DATABASE booking WITH OWNER = postgres",
+            "schemas": [
+                {
+                    "name": "client",
+                    "sql": "CREATE SCHEMA client AUTHORIZATION postgres",
+                    "tables": [
+                        {
+                            "name": "client",
+                            "sql": "CREATE TABLE IF NOT EXISTS client.client ( id serial NOT NULL, name text, surname text, cellnr text, email text constraint client_pkey primary key (id))",
+                            "defaults": []
+                        }, 
+                        {
+                            "name": "invoice",
+                            "sql": "CREATE TABLE IF NOT EXISTS client.invoice ( id serial NOT NULL, client_id text, booking_id text, invoice_lines jsonb, constraint invoice_pkey primary key (id))",
+                            "defaults": []
+                        },
+                        {
+                            "name": "booking",
+                            "sql": "CREATE TABLE IF NOT EXISTS client.booking ( id serial NOT NULL, booking_date text NOT NULL, booking_time text NOT NULL, employee_id text, reason text, client jsonb, constraint booking_pkey primary key (id))",
+                            "defaults": []
+                        }
+                    ],
+                    "views": []
+                },
+                {
+                    "name": "global",
+                    "sql": "CREATE SCHEMA global AUTHORIZATION postgres",
+                    "tables" : [
+                        {
+                            "name": "user",
+                            "sql": "CREATE TABLE IF NOT EXISTS global.user ( id serial NOT NULL, username text NOT NULL, user_groups int[], password text NOT NULL, name text, login_count integer, disabled boolean default false, constraint user_pkey primary key (id, username))",
+                            "defaults": ["INSERT INTO global.user (username, user_groups, password) values ('admin', '{1}'::int[], 'admin')"]
+                        },
+                        {
+                            "name": "session",
+                            "sql": "CREATE TABLE IF NOT EXISTS global.session (session_id text NOT NULL, date_created timestamp default current_timestamp, username text NOT NULL, user_id text NOT NULL, constraint session_pkey primary key (session_id, username, user_id))",
+                            "defaults": []
+                        },
+                        {
+                            "name": "user_group",
+                            "sql": "CREATE TABLE IF NOT EXISTS global.user_group ( id serial NOT NULL, group_name text NOT NULL, description text, constraint user_group_pkey primary key (id, group_name))",
+                            "defaults": ["INSERT INTO global.user_group (group_name, description) values ('superuser', 'Super User')"]
+                        }
+                    ],
+                    "views": []
+                }
+            ]
+        }
+    ]
+}

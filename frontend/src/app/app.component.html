@@ -1,0 +1,19 @@
+<button (click)="addClient()">Add Client</button>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>NAME</th>
+      <th>SURNAME</th>
+      <th>SAVE</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let client of clients">
+    <tr>
+      <td>{{client.id}}</td>
+      <td><input [(ngModel)]="client.name"/></td>
+      <td><input [(ngModel)]="client.surname"/></td>
+      <td><button (click)="saveClient(client)">Save</button></td>
+    </tr>
+  </tbody>
+</table>
