@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 const headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" });
 const options = new RequestOptions({ headers: headers, withCredentials: true });
 
-const url = "http://127.0.0.1:9000/test/"; // <-- This url will be used when posting it should be your server address.
+const url = "http://127.0.0.1:8080/test/"; // <-- This url will be used when posting it should be your server address.
 // <-- The /booking is the module which you wish to call.
 // <-- /booking/saveClient will call the saveClient function in the module booking.
 // <-- This is used by default, edit the proxy.conf.json file in order to let it run through another port and url if desired.
@@ -135,7 +135,6 @@ export class DBModel {
      * @returns {promise} - Returns a promise response if the update if false, returns a Observable that you can subscribe to if the update is true.
      */
     save(): Promise<any> {
-        // If you would like the model to update itself after the save, just pass in the true on the save function. 
         if (this.saveModel) {
             let model = {};
             let fields = this.values();
